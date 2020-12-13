@@ -1,7 +1,6 @@
 import cors from 'cors';
 import compression from 'compression';
-// import fs from 'fs/promises';
-import fs from 'fs';
+import httpErrors from 'http-errors';
 import express, { ErrorRequestHandler, Request, Response, Express, Handler } from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import morgan from 'morgan';
@@ -17,8 +16,9 @@ import { join } from 'path';
 import { EnvSingleton } from './env/env.singleton';
 import { pathToArray } from 'graphql/jsutils/Path';
 import { DIR_ROOT } from './dir.root';
-import { loggerStream } from './common/logger/logger.singleton';
+import { logger, loggerStream } from './common/logger/logger.singleton';
 import rateLimit from 'express-rate-limit';
+import { prettyQ } from './common/helpers/pretty.helper';
 
 export async function setup(app: Express): Promise<Express> {
   /**
@@ -76,8 +76,9 @@ export async function setup(app: Express): Promise<Express> {
 
   // error handler
   app.use(function (err, req, res, next) {
-    const error = new HttpErrors.InternalServerError();
-    res.status(error.statusCode).json(error);
+    logger.error(`Error: ${prettyQ(err)}`);
+    const _err = err instanceof httpErrors.HttpError ? err : new httpErrors.InternalServerError();
+    res.status(_err.status).json(_err); 
   } as ErrorRequestHandler);
 
   return app;
