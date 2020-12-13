@@ -1,16 +1,19 @@
 {
-  "name": "2020-12-10-accounts",
-  "version": "0.0.1",
+  "name": "example-gql-ts-accounts",
+  "version": "0.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "dist/app.js",
+  "repository": {
+    "url": "https://github.com/NickKelly1/example-gql-ts-accounts"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node dist/app.js",
     "dev": "ts-node-dev --notify false --respawn src/app.ts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["GraphQL", "TypeScript", "NodeJS"],
+  "author": "Nick Kelly",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",

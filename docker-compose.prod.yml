@@ -1,16 +1,17 @@
 version: "3"
 
 services:
-  nk_examples_accounts:
-    container_name: nk_examples_accounts
-    image: nick3141/nickkelly.dev.examples.accounts
+  example_gql_ts_accounts:
+    container_name: example_gql_ts_accounts
+    image: nick3141/example-gql-ts-accounts
     restart: unless-stopped
     ports:
       - 5000:5000
-    env_file:
-      .env.prod
     networks:
       - nk
+    environment:
+      - PORT=5000
+
 
 networks:
   nk:

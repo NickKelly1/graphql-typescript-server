@@ -1,5 +1,5 @@
 # https://blog.container-solutions.com/tagging-docker-images-the-right-way
-NAME		:= nick3141/nickkelly.dev.examples.accounts
+NAME		:= nick3141/example-gql-ts-accounts
 # tag as git commit:
 # TAG 		:= $$(git log -1 --pretty=%h)
 # tag as package.json version:
