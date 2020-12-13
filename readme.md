@@ -665,7 +665,7 @@ version: "3"
 services:
   example_gql_ts_accounts:
     container_name: example_gql_ts_accounts
-    image: nick3141/example-gql-ts-accounts
+    image: nick3141/example-gql-ts-accounts:latest
     restart: unless-stopped
     ports:
       - 5000:5000
