@@ -636,3 +636,45 @@ Mostly container
 ### How contexts are created
 
 Framework...
+
+## Hosting this server with Docker
+
+### With Docker:
+
+```bash
+docker run \
+  --name example_gql_ts_accounts \
+  -p 5000:5000 \
+  -e PORT=5000 \
+  -e LOG_DIR=./storage/logs \
+  -e LOG_MAX_SIZE=20m \
+  -e LOG_ROTATION_MAX_AGE=7d \
+  -e RATE_LIMIT_WINDOW_MS=60000 \
+  -e RATE_LIMIT_MAX=100 \
+  --rm \
+  nick3141/example-gql-ts-accounts
+```
+
+## With Docker Compose:
+
+```yaml
+version: "3"
+
+services:
+  example_gql_ts_accounts:
+    container_name: example_gql_ts_accounts
+    image: nick3141/example-gql-ts-accounts
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    environment:
+      - PORT=5000
+      # optional:
+      # - LOG_DIR=./storage/logs
+      # - LOG_MAX_SIZE=20m
+      # - LOG_ROTATION_MAX_AGE=7d
+      # - RATE_LIMIT_WINDOW_MS=60000
+      # - RATE_LIMIT_MAX=100
+    volumes:
+      - ./_v_logs:/usr/src/app/storage/logs
+```

@@ -9,28 +9,38 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "node dist/app.js",
-    "dev": "ts-node-dev --notify false --respawn src/app.ts"
+    "start": "node dist/www.js",
+    "dev": "ts-node-dev --notify false --respawn src/www.ts"
   },
-  "keywords": ["GraphQL", "TypeScript", "NodeJS"],
+  "keywords": [
+    "GraphQL",
+    "TypeScript",
+    "NodeJS"
+  ],
   "author": "Nick Kelly",
   "license": "ISC",
   "dependencies": {
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
+    "express-rate-limit": "^5.2.3",
     "faker": "^5.1.0",
     "graphiql": "^1.2.0",
     "graphql": "^15.4.0",
     "http-errors": "^1.8.0",
     "joi": "^17.3.0",
     "morgan": "^1.10.0",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
+    "@types/compression": "^1.7.0",
     "@types/cors": "^2.8.8",
     "@types/express": "^4.17.9",
+    "@types/express-rate-limit": "^5.1.0",
     "@types/faker": "^5.1.5",
     "@types/http-errors": "^1.8.0",
     "@types/morgan": "^1.9.2",

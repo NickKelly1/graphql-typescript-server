@@ -1,10 +1,11 @@
 import cors from 'cors';
+import compression from 'compression';
 // import fs from 'fs/promises';
 import fs from 'fs';
-import express, { ErrorRequestHandler, Request, Response } from 'express';
+import express, { ErrorRequestHandler, Request, Response, Express, Handler } from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import morgan from 'morgan';
-import { graphql, GraphQLObjectType, GraphQLSchema } from "graphql";
+import { GraphQLObjectType, GraphQLSchema } from "graphql";
 import { AccountMutation } from "./account/account.gql.mutation";
 import { AccountQuery } from "./account/account.gql.query";
 import { GqlContext } from "./common/classes/gql.context";
@@ -13,13 +14,13 @@ import { TransactionMutation } from "./transaction/transaction.gql.mutation";
 import { TransactionQuery } from "./transaction/transaction.gql.query";
 import HttpErrors from 'http-errors';
 import { join } from 'path';
-import { ROOT_DIR } from './root-dir';
 import { EnvSingleton } from './env/env.singleton';
 import { pathToArray } from 'graphql/jsutils/Path';
+import { DIR_ROOT } from './dir.root';
+import { loggerStream } from './common/logger/logger.singleton';
+import rateLimit from 'express-rate-limit';
 
-async function start() {
-  const app = express();
-
+export async function setup(app: Express): Promise<Express> {
   /**
    * GraphQL
    */
@@ -45,29 +46,20 @@ async function start() {
     mutation: RootGqlMutation,
   });
 
-  app.use((morgan('dev') as any));
-
+  // log access
+  app.use((morgan('dev', { stream: loggerStream }) as Handler));
+  // from anywhere
   app.use(cors())
+  // rate limit
+  app.use(rateLimit({
+    windowMs: EnvSingleton.RATE_LIMIT_WINDOW_MS,
+    max: EnvSingleton.RATE_LIMIT_MAX,
+  }));
+  // gzip
+  app.use(compression());
+  // don't require .html at the end of path to access .html files
+  app.use(express.static(join(DIR_ROOT, './public'), { extensions: ['html'] }));
 
-
-  // graphql endpoint
-  app.post('/', (req, res, next) => (async () => {
-    //
-  })().catch(next));
-
-  // TODO: static serve public
-
-  // don't require .html to access .html files
-  app.use(express.static(join(ROOT_DIR, './public'), { extensions: ['html'] }));
-
-  // custom graphiql (interface for graphql) endpoint
-  // const indexHtml = await fs.readFile(join(ROOT_DIR, './public/index.html')).then(String);
-  // const indexHtml = await fs.readFile(join(ROOT_DIR, './public/index.html')).then(String);
-  // app.get('/', (req, res, next) => fs
-  //   .createReadStream(join(ROOT_DIR, './public/index.html'))
-  //   .pipe(res.status(200).contentType('text/html'))
-  //   .on('error', next));
-  
   // graphql endpoint
   app.use('/gql', graphqlHTTP((req, res) => ({
     schema: schema,
@@ -88,7 +80,5 @@ async function start() {
     res.status(error.statusCode).json(error);
   } as ErrorRequestHandler);
 
-  app.listen(EnvSingleton.PORT, () => console.log(`server listening on ${EnvSingleton.PORT}`));
+  return app;
 }
-
-setTimeout(start, 0);
