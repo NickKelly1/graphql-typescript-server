@@ -1,5 +1,7 @@
 # Writing a GraphQL TypeScript Server in NodeJS
 
+![status](https://health.nickkelly.dev/check?size=xl&url=https://www.examples-accounts.nickkelly.dev/)
+
 GraphQL is becoming an increasingly viable alternative to REST in modern web development by providing significant productivity and performance advantages.
 
 In this post we will explore how to write a vanilla code-first GraphQL Server with TypeScript in NodeJS.
