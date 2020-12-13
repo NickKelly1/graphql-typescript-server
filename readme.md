@@ -654,7 +654,7 @@ docker run \
   -e RATE_LIMIT_WINDOW_MS=60000 \
   -e RATE_LIMIT_MAX=100 \
   --rm \
-  nick3141/example-gql-ts-accounts
+  nick3141/example-gql-ts-accounts:latest
 ```
 
 ## With Docker Compose:
