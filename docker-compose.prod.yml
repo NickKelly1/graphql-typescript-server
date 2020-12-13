@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  nk_examples_accounts:
+    container_name: nk_examples_accounts
+    image: nick3141/nickkelly.dev.examples.accounts
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    env_file:
+      .env.prod
+    networks:
+      - nk
+
+networks:
+  nk:
+    driver: bridge
