@@ -11,6 +11,7 @@
   <head>
     <style>
       body {
+        /* min-height: 100%; */
         height: 100%;
         margin: 0;
         width: 100%;
@@ -27,8 +28,8 @@
     GraphiQL itself depends on React DOM.
     If you do not want to rely on a CDN, you can host these files locally or
     include them directly in your favored resource bunder. -->
-    <script src="/scripts/react.development.js" ></script>
-    <script src="/scripts/react-dom.development.js" ></script>
+    <script src="/scripts/react.js" ></script>
+    <script src="/scripts/react-dom.js" ></script>
 
     <!-- These two files can be found in the npm module, however you may wish to
     copy them directly into your environment, or perhaps include them in your
@@ -50,7 +51,6 @@
   <body>
     <div id="graphiql">Loading...</div>
     <script src="/scripts/graphiql.min.js" type="application/javascript"></script>
-    <!-- <script src="/renderExample.js" type="application/javascript"></script> -->
     <script>
       function graphQLFetcher(graphQLParams) {
         const origin = window.location.origin;

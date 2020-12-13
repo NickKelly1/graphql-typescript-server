@@ -1,5 +1,6 @@
 import cors from 'cors';
-import fs from 'fs/promises';
+// import fs from 'fs/promises';
+import fs from 'fs';
 import express, { ErrorRequestHandler, Request, Response } from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import morgan from 'morgan';
@@ -14,6 +15,7 @@ import HttpErrors from 'http-errors';
 import { join } from 'path';
 import { ROOT_DIR } from './root-dir';
 import { EnvSingleton } from './env/env.singleton';
+import { pathToArray } from 'graphql/jsutils/Path';
 
 async function start() {
   const app = express();
@@ -21,7 +23,7 @@ async function start() {
   /**
    * GraphQL
    */
-  const GqlQuery = new GraphQLObjectType<unknown, GqlContext>({
+  const RootGqlQuery = new GraphQLObjectType<unknown, GqlContext>({
     name: 'RootQueryType',
     fields: {
       ...unthunk(AccountQuery),
@@ -30,7 +32,7 @@ async function start() {
   });
 
 
-  const GqlMutation = new GraphQLObjectType<unknown, GqlContext>({
+  const RootGqlMutation = new GraphQLObjectType<unknown, GqlContext>({
     name: 'RootMutationType',
     fields: {
       ...unthunk(AccountMutation),
@@ -39,8 +41,8 @@ async function start() {
   });
 
   const schema = new GraphQLSchema({
-    query: GqlQuery,
-    mutation: GqlMutation,
+    query: RootGqlQuery,
+    mutation: RootGqlMutation,
   });
 
   app.use((morgan('dev') as any));
@@ -55,12 +57,17 @@ async function start() {
 
   // TODO: static serve public
 
-  app.use(express.static(join(ROOT_DIR, './public')));
+  // don't require .html to access .html files
+  app.use(express.static(join(ROOT_DIR, './public'), { extensions: ['html'] }));
 
   // custom graphiql (interface for graphql) endpoint
-  const indexHtml = await fs.readFile(join(ROOT_DIR, './public/index.html')).then(String);
-  app.get('/', (req, res) => res.status(200).contentType('text/html').send(indexHtml));
-
+  // const indexHtml = await fs.readFile(join(ROOT_DIR, './public/index.html')).then(String);
+  // const indexHtml = await fs.readFile(join(ROOT_DIR, './public/index.html')).then(String);
+  // app.get('/', (req, res, next) => fs
+  //   .createReadStream(join(ROOT_DIR, './public/index.html'))
+  //   .pipe(res.status(200).contentType('text/html'))
+  //   .on('error', next));
+  
   // graphql endpoint
   app.use('/gql', graphqlHTTP((req, res) => ({
     schema: schema,

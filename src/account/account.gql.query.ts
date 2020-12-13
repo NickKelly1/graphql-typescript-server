@@ -1,5 +1,5 @@
 import { Thunk, GraphQLFieldConfigMap, GraphQLNonNull } from "graphql";
-import HttpError from 'http-errors';
+import HttpErrors from 'http-errors';
 import { GqlContext } from "../common/classes/gql.context";
 import { CollectionQueryInput } from "../common/gql/gql.collection-query";
 import { getPageInfo } from "../common/helpers/get-page-info.helper";
@@ -24,7 +24,7 @@ export const AccountQuery: Thunk<GraphQLFieldConfigMap<unknown, GqlContext>> = (
       if (!ctx.services.accountPolicy.canFindMany()) {
         // for a production grade application internationalise
         // the error using the request ctx's languages
-        throw new HttpError.Forbidden('Cannot Find Accounts');
+        throw new HttpErrors.Forbidden('Cannot Find Accounts');
       }
 
       // parse the Gql Query Input into repository options

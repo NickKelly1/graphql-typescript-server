@@ -9,10 +9,16 @@ IMG			:= ${NAME}:${TAG}
 LATEST	:= ${NAME}:latest
 
 update-scripts:
-	curl "https://unpkg.com/react@16/umd/react.development.js" -sL --max-redirs 10 -o "public/scripts/react.development.js"
-	curl "https://unpkg.com/react-dom@16/umd/react-dom.development.js" -sL --max-redirs 10 -o "public/scripts/react-dom.development.js"
+	curl "https://cdn.jsdelivr.net/npm/react@16/umd/react.production.min.js" -sL --max-redirs 10 -o "public/scripts/react.js"
+	curl "https://cdn.jsdelivr.net/npm/react-dom@16/umd/react-dom.production.min.js" -sL --max-redirs 10 -o "public/scripts/react-dom.js"
 	curl "https://unpkg.com/graphiql/graphiql.min.css" -sL --max-redirs 10 -o "public/stylesheets/graphiql.min.css"
 	curl "https://unpkg.com/graphiql/graphiql.min.js" -sL --max-redirs 10 -o "public/scripts/graphiql.min.js"
+	curl "https://cdn.jsdelivr.net/es6-promise/4.0.5/es6-promise.auto.min.js" -sL --max-redirs 10 -o "public/scripts/es6-promise.auto.min.js"
+	curl "https://cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js" -sL --max-redirs 10 -o "public/scripts/fetch.min.js"
+	curl "https://cdn.jsdelivr.net/npm/graphql-voyager/dist/voyager.css" -sL --max-redirs 10 -o "public/stylesheets/voyager.css"
+	curl "https://cdn.jsdelivr.net/npm/graphql-voyager/dist/voyager.min.js" -sL --max-redirs 10 -o "public/scripts/voyager.min.js"
+	curl "https://cdn.jsdelivr.net/npm/graphql-voyager/dist/voyager.min.js" -sL --max-redirs 10 -o "public/scripts/voyager.min.js"
+	curl "https://cdn.jsdelivr.net/npm/graphql-voyager/dist/voyager.worker.js" -sL --max-redirs 10 -o "public/scripts/voyager.worker.js"
 
 echo-tag:
 	echo ${TAG}
