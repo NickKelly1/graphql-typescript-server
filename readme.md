@@ -720,7 +720,7 @@ docker run \
   nick3141/example-gql-ts-accounts:latest
 ```
 
-## With Docker Compose:
+### With Docker Compose:
 
 ```yaml
 version: "3"
