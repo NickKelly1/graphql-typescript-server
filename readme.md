@@ -20,17 +20,17 @@ You will see important code snippets and fill in the blanks with the rest of you
 
 For the complete example server code, visit the [GitHub](https://github.com/NickKelly1/example-gql-ts-accounts).
 
-- [Live server](https://example-accounts.nickkelly.dev)
-- [Live schema](https://example-accounts.nickkelly.dev/visualise)
+- [Live server](https://examples-accounts.nickkelly.dev)
+- [Live schema](https://examples-accounts.nickkelly.dev/visualise)
 - [Docker](https://hub.docker.com/repository/docker/nick3141/example-gql-ts-accounts)
 - [GitHub](https://github.com/NickKelly1/example-gql-ts-accounts)
 
 
-### [GraphiQL](https://example-accounts.nickkelly.dev)
+### [GraphiQL](https://examples-accounts.nickkelly.dev)
 
 ![graphiql](./public/images/graphiql.png)
 
-### [Partial Schema](https://example-accounts.nickkelly.dev/visualise)
+### [Partial Schema](https://examples-accounts.nickkelly.dev/visualise)
 
 ![schema-1](./public/images/schema-1.png)
 ![schema-2](./public/images/schema-2.png)
