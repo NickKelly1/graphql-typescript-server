@@ -8,7 +8,7 @@ In this post we will explore some important parts of writing a NodeJS code-first
 
 ## This is for
 
-People who understand the basics of GraphQL and want to see some patterns, techniques and different non-decorator approaches to buidling a GraphQL server in TypeScript.
+People who understand the basics of GraphQL and want to see some patterns, techniques and different non-decorator approaches to building a GraphQL server in TypeScript.
 
 ## This is not
 
