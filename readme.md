@@ -6,11 +6,11 @@ GraphQL is becoming an increasingly viable alternative to REST in modern web dev
 
 In this post we will explore some important parts of writing a NodeJS code-first vanilla GraphQL Server in TypeScript.
 
-## This is for:
+## This is for
 
 People who understand the basics of GraphQL and want to see some patterns, techniques and different non-decorator approaches to buidling a GraphQL server in TypeScript.
 
-## This is not:
+## This is not
 
 A complete front-to-back tutorial.
 
@@ -37,7 +37,7 @@ For the complete example server code, visit the [GitHub](https://github.com/Nick
 
 ### Supported queries
 
-A GraphQL server built with the architecture outlined be low will support queries such as:
+A GraphQL server built with the architecture outlined be low will support queries and mutations such as:
 
 ```GraphQL
 fragment PageInfoFragment on PageInfo{ page pages count total more }
