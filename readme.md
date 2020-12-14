@@ -134,11 +134,11 @@ Content-Length: ...
 }
 ```
 
-GraphQL makes this a easier than REST since GraphQL API's often served off a single URL removing the need for "links". Furthermore, GraphQL's introspective type system lets developers circumvent API docs.
+GraphQL makes this easier than REST since GraphQL APIs often served off a single URL removing the need for "links". Furthermore, GraphQL's introspective type system lets developers circumvent API docs.
 
 ### Leveraging Query Resolution to Create Flexible Graphs
 
-Understanding how GraphQL resolves a queries by separating `Type` and `Source` lets us build flexible and well separated JSON structures.
+Understanding how GraphQL resolves queries by separating `Type` and `Source` lets us build flexible and well-separated JSON structures.
 
 A GraphQL server resolves a query by traversing the `GraphQLObjectType` tree to build a JSON response. However, the `Source` returned from a resolver need not of similar shape as the resolving `GraphQLObjectType`.
 
@@ -237,7 +237,7 @@ This is in contrast to the flat equivalent:
 
 As always with GraphQL, we provide a root Query type for reading and root Mutation type for updating.
 
-Due to NodeJS module resolution and the cyclic nature of graph data structures, we run into [import races](https://nodejs.org/api/modules.html#modules_cycles) when node resolves our program. To get around this, the [graphql](https://www.npmjs.com/package/graphql) library lets us define fields as Thunks. Instead of defining a field object, we define a function that returns the field object. After all circular modules are resolved by node, the GraphQL server can resolve the fields and the schema.
+Due to NodeJS module resolution and the cyclic nature of graph data structures, we run into [import races](https://nodejs.org/api/modules.html#modules_cycles) when Node resolves our program. To get around this, the [graphql](https://www.npmjs.com/package/graphql) library lets us define fields as Thunks. Instead of defining a field object, we define a function that returns the field object. After all circular modules are resolved by node, the GraphQL server can resolve the fields and the schema.
 
 ```TypeScript
 /**
@@ -362,7 +362,7 @@ export const AccountQuery: Thunk<GraphQLFieldConfigMap<unknown, GqlContext>> = (
 
 An `AccountCollectionNode` represents a paginated list of `Accounts`.
 
-It has an array of `AccountNodes`, a `AccountCollectionActions` object with actions the client is/isn't authorised to take on the collection, and a `PageInfo` object detailing the results page number, total pages, whether there are more pages, etc....
+It has an array of `AccountNodes`, a `AccountCollectionActions` object with actions the client is/isn't authorised to take on the collection, and a `PageInfo` object detailing the results page number, total pages, whether there are more pages, etc...
 
 ```TypeScript
 /**
@@ -666,7 +666,7 @@ export class AccountPolicy {
 }
 ```
 
-Policies exist in contrast to other popular techniques like `Guards` that apply method/route based authorisation to endpoints (such as  resolvers, http endpoints, etc...) and whose logic can't be shared with different parts of the codebase. Guards' power is they're simple and readable. Guards are useful when working at high resolution such as authorising access to sensitive fields like `date_of_birth` or `email`, where the authorisation is too granular to publish in practice.
+Policies exist in contrast to other popular techniques like `Guards` that apply method/route based authorisation to endpoints (such as  resolvers, HTTP endpoints, etc...) and whose logic can't be shared with different parts of the codebase. Guards' power is they're simple and readable. Guards are useful when working at high resolution such as authorising access to sensitive fields like `date_of_birth` or `email`, where the authorisation is too granular to publish in practice.
 
 [A guard example adopted from TypeGraphQL](https://typegraphql.com/docs/authorization.html#docsNav).
 
