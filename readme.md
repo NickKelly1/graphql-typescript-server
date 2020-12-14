@@ -103,7 +103,7 @@ mutation Withdraw {
 
 Most popular guides use experimental / to-be-deprecated [TypeScript (ES6) Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html) which obscure the GraphQL resolution process by merging the ORM layer with the API and the API layer with the authorisation layer.
 
-Instead of Decorators, we will use the primitives provided by the [graphql npm package](https://www.npmjs.com/package/graphql). Most importantly: `GraphQLObjectType` and `GraphQLInputType`. These primitiives are powerful enough to build a highly expressive and flexible GraphQL API.
+Instead of Decorators, we will use the primitives provided by the [graphql npm package](https://www.npmjs.com/package/graphql). Most importantly: `GraphQLObjectType` and `GraphQLInputType`. These primitives are powerful enough to build a highly expressive and flexible GraphQL API.
 
 
 ### GraphQL as the Engine of Application State
@@ -136,7 +136,7 @@ Content-Length: ...
 
 GraphQL makes this a easier than REST since GraphQL API's often served off a single URL removing the need for "links". Furthermore, GraphQL's introspective type system lets developers circumvent API docs.
 
-### Leveraging Query Resolution for Flexible Structures
+### Leveraging Query Resolution to Create Flexible Graphs
 
 Understanding how GraphQL resolves a queries by separating `Type` and `Source` lets us build flexible and well separated JSON structures.
 
@@ -395,7 +395,7 @@ export const AccountCollectionNode = new GraphQLObjectType<IAccountCollectionNod
       resolve: (parent): (null | IAccountNodeSource)[] => parent.nodes,
     },
 
-    // resolve : PageInfo
+    // resolve: PageInfo
     pageInfo: {
       type: GraphQLNonNull(PageInfo),
       resolve: (parent): IPageInfoSource => parent.pageInfo,
