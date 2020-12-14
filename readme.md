@@ -1,4 +1,4 @@
-# [Writing a GraphQL TypeScript Server in NodeJS](https://examples-accounts.nickkelly.dev)
+# [Writing a GraphQL TypeScript Server for NodeJS](https://examples-accounts.nickkelly.dev)
 
 ![status](https://health.nickkelly.dev/check?size=xl&url=https://www.examples-accounts.nickkelly.dev/)
 
