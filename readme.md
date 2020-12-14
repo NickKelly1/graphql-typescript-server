@@ -1,25 +1,48 @@
-# Writing a GraphQL TypeScript Server in NodeJS
+# [Writing a GraphQL TypeScript Server in NodeJS](https://example-accounts.nickkelly.dev)
 
 ![status](https://health.nickkelly.dev/check?size=xl&url=https://www.examples-accounts.nickkelly.dev/)
 
 GraphQL is becoming an increasingly viable alternative to REST in modern web development by providing significant productivity and performance advantages.
 
-In this post we will explore how to write a vanilla code-first GraphQL Server with TypeScript in NodeJS.
+In this post we will explore some important parts of writing a NodeJS code-first vanilla GraphQL Server in TypeScript.
 
-- [Check out the live server](example-accounts.nickkelly.dev)
-- [Check out the schema](example-accounts.nickkelly.dev/visualise)
-- [Self host with Docker](https://hub.docker.com/repository/docker/nick3141/example-gql-ts-accounts)
-- [View the source code on GitHub](https://github.com/NickKelly1/example-gql-ts-accounts)
+## This is for:
 
-## After completion
+People who understand the basics of GraphQL and want to see some patterns, techniques and different non-decorator approaches to buidling a GraphQL server in TypeScript.
 
-Here's an example of queries that will run on the completed server
+## This is not:
 
-### Query: Accounts
+A complete front-to-back tutorial.
+
+You will see important code snippets and fill in the blanks with the rest of your stack.
+
+## Final result:
+
+For the complete example server code, visit the [GitHub](https://github.com/NickKelly1/example-gql-ts-accounts).
+
+- [Live server](https://example-accounts.nickkelly.dev)
+- [Live schema](https://example-accounts.nickkelly.dev/visualise)
+- [Docker](https://hub.docker.com/repository/docker/nick3141/example-gql-ts-accounts)
+- [GitHub](https://github.com/NickKelly1/example-gql-ts-accounts)
+
+
+### [GraphiQL](https://example-accounts.nickkelly.dev)
+
+![graphiql](./public/images/graphiql.png)
+
+### [Partial Schema](https://example-accounts.nickkelly.dev/visualise)
+
+![schema-1](./public/images/schema-1.png)
+![schema-2](./public/images/schema-2.png)
+
+### Supported queries
+
+A GraphQL server built with the architecture outlined be low will support queries such as:
 
 ```GraphQL
 fragment PageInfoFragment on PageInfo{ page pages count total more }
 
+# Find many Accounts
 query FindAccounts {
   accounts(query:{limit:2 offset:0 sorts:[ { field:"id", dir: Asc } ]}){
     # collection of (first 2) accounts (sorted by id)
@@ -44,10 +67,8 @@ query FindAccounts {
     }
   }
 }
-```
 
-### Mutation: Deposit
-```GraphQL
+# Deposit into an Account
 mutation Deposit {
   deposit(dto:{ account_id:1 amount:999999 }) {
     data { id name balance }
@@ -60,10 +81,8 @@ mutation Deposit {
     }
   }
 }
-```
 
-### Mutation: Withdraw
-```GraphQL
+# Withdraw from an Account
 mutation Withdraw {
   deposit(dto:{ account_id:1 amount:20 }) {
     data { id name balance }
@@ -78,30 +97,91 @@ mutation Withdraw {
 }
 ```
 
-## Code-first: decorators vs objects
+## Background
+
+### Code-first: decorators vs objects
 
 Most popular guides use experimental / to-be-deprecated [TypeScript (ES6) Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html) which obscure the GraphQL resolution process by merging the ORM layer with the API and the API layer with the authorisation layer.
 
 Instead of Decorators, we will use the primitives provided by the [graphql npm package](https://www.npmjs.com/package/graphql). Most importantly: `GraphQLObjectType` and `GraphQLInputType`. These primitiives are powerful enough to build a highly expressive and flexible GraphQL API.
 
 
-## GraphQL as the Engine of Application State
+### GraphQL as the Engine of Application State
 
-HATEOAS (Hypertext as the Engine of Application State) is an important part of the rest standard. In practice, HATEOAS means the server should publish client-resource authorisation and routing such that code need not be duplicated on the client.
+HATEOAS (Hypertext as the Engine of Application State) is an important part of the rest standard.
 
-When requesting a resource the response should contain authorisation and link metadata.
+In practice, HATEOAS means the server should publish client-resource authorisation and routing to minimise code duplication on the client. A resource response should contain [authorisation and link metadata](https://en.wikipedia.org/wiki/HATEOAS#:~:text=Hypermedia%20as%20the%20Engine%20of,provide%20information%20dynamically%20through%20hypermedia.).
 
-GraphQL makes this a little simpler than REST given it's often served off a single URL. Furthermore, GraphQL's introspective type system lets developers circumvent often poorly maintained, missing or complicated REST API docs.
+```http
+HTTP/1.1 200 OK
+Content-Type: application/vnd.acme.account+json
+Content-Length: ...
 
-## Query Resolution
+{
+    "account": {
+        "account_number": 12345,
+        "balance": {
+            "currency": "usd",
+            "value": 100.00
+        },
+        "links": {
+            "deposit": "/accounts/12345/deposit",
+            "withdraw": "/accounts/12345/withdraw",
+            "transfer": "/accounts/12345/transfer",
+            "close": "/accounts/12345/close"
+        }
+    }
+}
+```
 
-A GraphQL server resolves a query by traversing the `GraphQLObjectType` tree to build a JSON response. However, the `Source` returned from a resolver need not be a `Type` matching the `GraphQLObjectType` will resolve as.
+GraphQL makes this a easier than REST since GraphQL API's often served off a single URL removing the need for "links". Furthermore, GraphQL's introspective type system lets developers circumvent API docs.
 
-Understanding this opens the door writing flexible and well separated JSON structure.
+### Leveraging Query Resolution for Flexible Structures
 
-For example, a `GraphQLObjectType` that resolves an `Account` would typically resolve all fields, relations, and metadata on the same `GraphQLObjectType` node. Although, having separated our ORM layer from our GraphQL layer (something a Decorator based approach would obscure), we can separate an `Account` into multiple `GraphQLObjectTypes` representing an `Accounts` different data types, such as `AccountData` (the fields on an `accounts` table in the database), `AccountActions` (GATEOAS / action authorisation for the `Account` resource), `AccountRelations` (or `AccountConnections` in some GraphQL frameworkrs), and additional objects for any additional metadata types associated with an `Account`.
+Understanding how GraphQL resolves a queries by separating `Type` and `Source` lets us build flexible and well separated JSON structures.
 
-If we keep all leafs flat on a node, we would have this:
+A GraphQL server resolves a query by traversing the `GraphQLObjectType` tree to build a JSON response. However, the `Source` returned from a resolver need not of similar shape as the resolving `GraphQLObjectType`.
+
+For example, a `GraphQLObjectType` that resolves an `Account` would typically resolve all fields, relations, and metadata on the same `GraphQLObjectType` node. Although, having separated our ORM layer from our GraphQL layer (something a Decorator based approach would obscure), we can separate an `Account` into multiple `GraphQLObjectTypes` representing an `Accounts` different categories of data, such as `AccountData` (the fields on an `accounts` table in the database), `AccountActions` (G|HATEOAS / action authorisation for the `Account` resource), `AccountRelations` (or `AccountConnections`), and additional objects for any additional categories of data associated with an `Account`.
+
+```GraphQL
+# AccountNode fields:
+
+  # type: AccountActions
+  can { show withdraw deposit }
+
+  # type: AccountData
+  data { id name balance }
+
+  # type: AccountRelations
+  relations {
+
+    # type: TransactionCollection
+    transactions(query:{ sorts:[{ field: "amount", dir: Desc }]}){
+
+      # type: PageInfo
+      pageInfo { ...PageInfoFragment }
+
+      # type: TransactionCollectionActions
+      can { show }
+
+      # type: GraphQLList(TransactionNode)
+      nodes {
+
+        # type: TransactionActions
+        can { show }
+
+        # type: TransactionData
+        data { id description amount }
+
+        # type: TransactionRelations
+        relations { ... }
+      }
+    }
+  }
+```
+
+This is in contrast to the flat equivalent:
 
 ```GraphQL
 # AccountNode fields:
@@ -151,56 +231,13 @@ If we keep all leafs flat on a node, we would have this:
   }
 ```
 
-If we separate the leaves into their metadata types, we could have this:
-
-```GraphQL
-# AccountNode fields:
-
-  # type: AccountActions
-  can { show withdraw deposit }
-
-  # type: AccountData
-  data { id name balance }
-
-  # type: AccountRelations
-  relations {
-
-    # type: TransactionCollection
-    transactions(query:{ sorts:[{ field: "amount", dir: Desc }]}){
-
-      # type: PageInfo
-      pageInfo { ...PageInfoFragment }
-
-      # type: TransactionCollectionActions
-      can { show }
-
-      # type: GraphQLList(TransactionNode)
-      nodes {
-
-        # type: TransactionActions
-        can { show }
-
-        # type: TransactionData
-        data { id description amount }
-
-        # type: TransactionRelations
-        relations {
-          ...
-        }
-      }
-    }
-  }
-```
-
 ## Code
 
 ### Schema
 
 As always with GraphQL, we provide a root Query type for reading and root Mutation type for updating.
 
-Due to NodeJS module resolution and the cyclic nature of graph data structures, we run into all sorts of [import races](https://nodejs.org/api/modules.html#modules_cycles) when our app boot up. To get around this, the GraphQL library lets us define fields as Thunks. That is, instead of defining a field object, we define a function that returns out field object. After all circular modules are resolved by node the GraphQL server can resolve the fields and the schema.
-
-To keep things consistent and avoid circular dependency issues we will write all our `fields` as thunks.
+Due to NodeJS module resolution and the cyclic nature of graph data structures, we run into [import races](https://nodejs.org/api/modules.html#modules_cycles) when node resolves our program. To get around this, the [graphql](https://www.npmjs.com/package/graphql) library lets us define fields as Thunks. Instead of defining a field object, we define a function that returns the field object. After all circular modules are resolved by node, the GraphQL server can resolve the fields and the schema.
 
 ```TypeScript
 /**
@@ -216,6 +253,7 @@ import { TransactionQuery } from './transaction/transaction.gql.query.ts';
 
 const RootQuery = new GraphQLObjectType<unknown, GqlContext>({
   name: 'RootQueryType',
+  // To keep things consistent and avoid circular dependency issues we write all our `fields` as thunks.
   fields: () => ({
     ...unthunk(AccountQuery),
     ...unthunk(TransactionQuery),
@@ -245,8 +283,17 @@ function unthunk<T>(mbThunk: Thunk<T>): T {
 
 ### AccountQuery
 
-We define a root level query for `Accounts` to give to the `schema`.
-This is a set of "fields" that are available on the root query object.
+We define root level query fields for `Accounts`, which are provided to the `RootQuery` above.
+
+This is what lets us write
+
+```GraphQL
+query {
+  accounts{
+    ...
+  }
+}
+```
 
 ```TypeScript
 /**
@@ -261,10 +308,14 @@ import HttpErrors from 'http-errors';
 import { GqlContext } from '../common/classes/gql.context.ts';
 import { Thunk, GraphQLFieldConfigMap, GraphQLNonNull } from "graphql";
 
+
 // root Query type for an account
 // is an "Api Endpoint" for querying Accounts
-const AccountQuery = new GraphQLObjectType<unknown, GqlContext>({
-  // Get an AccountCollectionNode
+// thunk with the query fields to reduce the change of nasty import races
+export const AccountQuery: Thunk<GraphQLFieldConfigMap<unknown, GqlContext>> = () => ({
+  /**
+   * Find Accounts
+   */
   accounts: {
     // tell Gql to resolve the returned object as an AccountCollectionNode
     type: GraphQLNonNull(AccountCollectionNode),
@@ -278,6 +329,7 @@ const AccountQuery = new GraphQLObjectType<unknown, GqlContext>({
       if (!ctx.services.accountPolicy.canFindMany()) {
         throw new HttpErrors.Forbidden('Cannot Find Accounts');
       }
+
       const options = parseQuery(args.query);
 
       const results  = await ctx
@@ -310,7 +362,7 @@ const AccountQuery = new GraphQLObjectType<unknown, GqlContext>({
 
 An `AccountCollectionNode` represents a paginated list of `Accounts`.
 
-It has an array of `AccountNodes`, an `AccountCollectionActions` object with actions the client is/isn't authorised to take on the collection, and a `PageInfo` object detailing the results page number, total pages, whether there are more pages, etc....
+It has an array of `AccountNodes`, a `AccountCollectionActions` object with actions the client is/isn't authorised to take on the collection, and a `PageInfo` object detailing the results page number, total pages, whether there are more pages, etc....
 
 ```TypeScript
 /**
@@ -376,17 +428,33 @@ export const AccountCollectionNode = new GraphQLObjectType<IAccountCollectionNod
 
 ### AccountNode
 
-`AccountNode` is the super object for an `Account`. Attached to it is are objects with the different types of data associated with the parent `Account`, such as `AccountData` with the id, name, etc..., `AccountActions` with client authorisation, and `AccountRelations` which is used to query relations of this account.
+`AccountNode` is the root node for an `Account`. Its fields are nodes representing different categories of data of the parent `Account` such as `AccountData` with the id, name, etc..., `AccountActions` with client authorisation, and `AccountRelations`.
 
-Note that the `AccountNode` and all its children; `AccountData`, `AccountActions`, and `AccountRelations`, all have the same source/parent, the ORM's `AccountModel`. Look at the `AccountNode's` fields to see where we tell GraphQL to resolve as `AccountData`, `AccountActions`, `AccountRelations`, but simply return the parent to do so.
+Note that the `AccountNode` and all its children; `AccountData`, `AccountActions`, and `AccountRelations`, all have the same source/parent, the ORM's `AccountModel`. Look at the `AccountNode's` fields to see where we tell GraphQL to resolve as `AccountData`, `AccountActions`, `AccountRelations`, but simply return the parent.
 
-Understanding this is especially crucial for paginated relations since even if you prefer flat over nested data and do flatten all `Account` leafs onto the `AccountNode`, paginated `Relations/Connections` will always be nested as
+Understanding this is especially crucial for paginated relations since even if you prefer flat over nested schema, paginated `Relations/Connections` must always be nested.
+
 ```
         Root Node
             |
   Paginated Connection Node - requires the RootNode's source for querying the related data
        /          \
    PageInfo   Related Nodes
+```
+
+i.e.
+
+```GraphQL
+query {
+  rootNode{
+    # paginated connection node
+    # must provide the root nodes source to the xToManyRelation's resolver
+    xToManyRelation{
+      pageInfo
+      childNodes{ ... }
+    }
+  }
+}
 ```
 
 ```TypeScript
@@ -517,28 +585,7 @@ const AccountRelations: GraphQLObjectType<IAccountNodeSource, GqlContext> = new 
 
 ### AccountPolicy
 
-Policies are single responsibility objects that authorise actions. This means they can both be used to authorise an action, or to provide a G|HATEOAS response publishing authorised actions. They can be used in HTTP Requests, GraphQL requests, WebSocket requests, RPC requests, CRON contexts, Job contexts, Migration contexts, Seeder contexts, or anything else that could fit a RequestContext interface.
-
-This is in contrast to popular techniques like `Guards` that apply method/route based authorisation to endpoints (such as  resolvers) and whose logic can't be shared with different parts of the codebase. Guards are simple and readable but can't be shared with other parts of the codebase. [An example from TypeGraphQL](https://typegraphql.com/docs/authorization.html#docsNav). Guards are more useful when working at high resolution such as individual fields like `email` or `password`, where the items are too granular to publish authorisation for everything.
-
-```TypeScript
-// Guard example from TypeGraphQL, using the @Authorized decorator
-
-@Resolver()
-class MyResolver {
-  // Since the logic is statically attached to the endpoint and inaccessable elsewhere in the
-  // application, we can't publish this authorisation to the client without duplicating the logic
-  // (i.e. const canDoThing = user.permissions.includes("ADMIN")...)
-  @Authorized("ADMIN")
-  @Query()
-  authedQuery(): string {
-    return "Admin users only!";
-  }
-
-}
-```
-
-Alternatively, below is our reusable `AccountPolicy`.
+Policy classes are not specific to GraphQL but are included here because of their importance. They are single responsibility objects that authorise actions. This means they can both be used to 403/404 a request, or to provide a G|HATEOAS response publishing authorised actions. They can be used in HTTP Requests, GraphQL requests, WebSocket requests, RPC requests, CRON contexts, Job contexts, Migration contexts, Seeder contexts, or anything else that could fit a RequestContext interface.
 
 ```TypeScript
 /**
@@ -619,27 +666,43 @@ export class AccountPolicy {
 }
 ```
 
-### And more ObjectTypes...
+Policies exist in contrast to other popular techniques like `Guards` that apply method/route based authorisation to endpoints (such as  resolvers, http endpoints, etc...) and whose logic can't be shared with different parts of the codebase. Guards' power is they're simple and readable. Guards are useful when working at high resolution such as authorising access to sensitive fields like `date_of_birth` or `email`, where the authorisation is too granular to publish in practice.
 
-For the remaining GraphQL code see the [GitHub](https://github.com/NickKelly1/example-gql-ts-accounts) repository for this post.
+[A guard example adopted from TypeGraphQL](https://typegraphql.com/docs/authorization.html#docsNav).
+
+```TypeScript
+// Guard example from TypeGraphQL, using the @Authorized decorator
+
+@Resolver()
+class MyResolver {
+  // Since the logic is statically attached to the endpoint and inaccessable elsewhere in the
+  // application, we can't publish this authorisation to the client without duplicating the logic
+  // (i.e. const canDoThing = user.permissions.includes("ADMIN")...)
+  @Authorized("ADMIN")
+  @Query()
+  authedQuery(): string {
+    return "Admin users only!";
+  }
+
+}
+```
+
+### The rest...
+
+For the remaining server code see the [GitHub repository](https://github.com/NickKelly1/example-gql-ts-accounts) for this post.
 
 ## What we didn't cover
 
-### Using DataLoader
+- Using **DataLoader** to solve the n+1 problem
+- Using a **database**:
+  - ORM
+  - Migrations
+  - Seeing
+  - Transactions
+  - ...
+- How to serve a GraphQL server over **HTTP** (view the [Source Code](https://github.com/NickKelly1/example-gql-ts-accounts/blob/master/src/app.ts) for an example)
 
-N+1 Query
-
-### Using a Database
-
-Migrations, ORM, ...
-
-Mostly container
-
-### How contexts are created
-
-Framework...
-
-## Hosting this server with Docker
+## Hosting this example server:
 
 ### With Docker:
 
