@@ -37,7 +37,7 @@ For the complete example server code, visit the [GitHub](https://github.com/Nick
 
 ### Supported queries
 
-A GraphQL server built with the architecture outlined be low will support queries and mutations such as:
+A GraphQL server built with the architecture outlined below will support queries and mutations such as:
 
 ```GraphQL
 fragment PageInfoFragment on PageInfo{ page pages count total more }
