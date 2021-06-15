@@ -1,4 +1,4 @@
-# [Writing a GraphQL TypeScript Server for NodeJS](https://examples-accounts.nickkelly.dev)
+# [Writing a GraphQL TypeScript Server for NodeJS](https://graphql-typescript-server.nickkelly.dev)
 
 ![status](https://health.nickkelly.dev/check?size=xl&url=https://www.examples-accounts.nickkelly.dev/)
 
@@ -18,19 +18,19 @@ You will see important code snippets and fill in the blanks with the rest of you
 
 ## Final result:
 
-For the complete example server code, visit the [GitHub](https://github.com/NickKelly1/example-gql-ts-accounts).
+For the complete example server code, visit the [GitHub](https://github.com/NickKelly1/blog-graphql-typescript-server).
 
-- [Live server](https://examples-accounts.nickkelly.dev)
-- [Live schema](https://examples-accounts.nickkelly.dev/visualise)
-- [Docker](https://hub.docker.com/repository/docker/nick3141/example-gql-ts-accounts)
-- [GitHub](https://github.com/NickKelly1/example-gql-ts-accounts)
+- [Live server](https://graphql-typescript-server.nickkelly.dev)
+- [Live schema](https://graphql-typescript-server.nickkelly.dev/visualise)
+- [Docker](https://hub.docker.com/repository/docker/nick3141/blog-graphql-typescript-server)
+- [GitHub](https://github.com/NickKelly1/blog-graphql-typescript-server)
 
 
-### [GraphiQL](https://examples-accounts.nickkelly.dev)
+### [GraphiQL](https://blog-graphql-typescript-server.nickkelly.dev)
 
 ![graphiql](./public/images/graphiql.png)
 
-### [Partial Schema](https://examples-accounts.nickkelly.dev/visualise)
+### [Partial Schema](https://graphql-typescript-server.nickkelly.dev/visualise)
 
 ![schema-1](./public/images/schema-1.png)
 ![schema-2](./public/images/schema-2.png)
@@ -689,7 +689,7 @@ class MyResolver {
 
 ### The rest...
 
-For the remaining server code see the [GitHub repository](https://github.com/NickKelly1/example-gql-ts-accounts) for this post.
+For the remaining server code see the [GitHub repository](https://github.com/NickKelly1/blog-graphql-typescript-server) for this post.
 
 ## What we didn't cover
 
@@ -700,7 +700,7 @@ For the remaining server code see the [GitHub repository](https://github.com/Nic
   - Seeing
   - Transactions
   - ...
-- How to serve a GraphQL server over **HTTP** (view the [Source Code](https://github.com/NickKelly1/example-gql-ts-accounts/blob/master/src/app.ts) for an example)
+- How to serve a GraphQL server over **HTTP** (view the [Source Code](https://github.com/NickKelly1/blog-graphql-typescript-server/blob/master/src/app.ts) for an example)
 
 ## Hosting this example server:
 
@@ -717,7 +717,7 @@ docker run \
   -e RATE_LIMIT_WINDOW_MS=60000 \
   -e RATE_LIMIT_MAX=100 \
   --rm \
-  nick3141/example-gql-ts-accounts:latest
+  nick3141/blog-graphql-typescript-server:latest
 ```
 
 ### With Docker Compose:
@@ -728,7 +728,7 @@ version: "3"
 services:
   example_gql_ts_accounts:
     container_name: example_gql_ts_accounts
-    image: nick3141/example-gql-ts-accounts:latest
+    image: nick3141/blog-graphql-typescript-server:latest
     restart: unless-stopped
     ports:
       - 5000:5000
