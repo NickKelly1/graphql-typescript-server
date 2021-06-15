@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  example_gql_ts_accounts:
-    container_name: example_gql_ts_accounts
-    image: nick3141/example-gql-ts-accounts:latest
+  graphql_typescript_server:
+    container_name: graphql_typescript_server
+    image: nick3141/blog_graphql_typescript_server:latest
     restart: unless-stopped
     ports:
       - 5000:5000
