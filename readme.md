@@ -1,6 +1,6 @@
 # [Writing a GraphQL TypeScript Server for NodeJS](https://graphql-typescript-server.nickkelly.dev)
 
-![status](https://health.nickkelly.dev/check?size=xl&url=https://www.examples-accounts.nickkelly.dev/)
+![status](https://health.nickkelly.dev/check?size=xl&url=https://www.graphql-typescript-server.nickkelly.dev/)
 
 GraphQL is becoming an increasingly viable alternative to REST in modern web development by providing significant productivity and performance advantages.
 
