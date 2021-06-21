@@ -3,7 +3,7 @@ version: "3"
 services:
   graphql_typescript_server:
     container_name: graphql_typescript_server
-    image: nick3141/blog_graphql_typescript_server:latest
+    image: nick3141/graphql_typescript_server:latest
     restart: unless-stopped
     ports:
       - 5000:5000
