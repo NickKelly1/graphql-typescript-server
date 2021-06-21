@@ -1,10 +1,10 @@
 {
-  "name": "example-gql-ts-accounts",
-  "version": "0.0.2",
+  "name": "graphql-typescript-server",
+  "version": "0.0.3",
   "description": "",
   "main": "dist/app.js",
   "repository": {
-    "url": "https://github.com/NickKelly1/example-gql-ts-accounts"
+    "url": "https://github.com/NickKelly1/graphql-typescript-server"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
