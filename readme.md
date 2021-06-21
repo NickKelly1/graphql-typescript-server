@@ -16,7 +16,7 @@ A complete front-to-back tutorial.
 
 You will see important code snippets and fill in the blanks with the rest of your stack.
 
-## Final result:
+## Final result
 
 For the complete example server code, visit the [GitHub](https://github.com/NickKelly1/graphql-typescript-server).
 
