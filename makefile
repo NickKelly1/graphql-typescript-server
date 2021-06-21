@@ -47,8 +47,8 @@ dev-up-d:
 	docker-compose --env-file .env -f docker-compose.dev.yml up -d
 
 reload-stop:
-	docker stop example_gql_ts_accounts
-	docker rm example_gql_ts_accounts
+	docker stop graphql_typescript_server
+	docker rm graphql_typescript_server
 	docker image rm ${NAME}
 
 reload-git:

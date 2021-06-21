@@ -25,7 +25,6 @@ For the complete example server code, visit the [GitHub](https://github.com/Nick
 - [Docker](https://hub.docker.com/repository/docker/nick3141/graphql-typescript-server)
 - [GitHub](https://github.com/NickKelly1/graphql-typescript-server)
 
-
 ### [GraphiQL](https://blog-gql-ts.nickkelly.dev)
 
 ![graphiql](./public/images/graphiql.png)
@@ -104,7 +103,6 @@ mutation Withdraw {
 Most popular guides use experimental / to-be-deprecated [TypeScript (ES6) Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html) which obscure the GraphQL resolution process by merging the ORM layer with the API and the API layer with the authorisation layer.
 
 Instead of Decorators, we will use the primitives provided by the [graphql npm package](https://www.npmjs.com/package/graphql). Most importantly: `GraphQLObjectType` and `GraphQLInputType`. These primitives are powerful enough to build a highly expressive and flexible GraphQL API.
-
 
 ### GraphQL as the Engine of Application State
 
@@ -687,7 +685,7 @@ class MyResolver {
 }
 ```
 
-### The rest...
+### The rest
 
 For the remaining server code see the [GitHub repository](https://github.com/NickKelly1/graphql-typescript-server) for this post.
 
@@ -702,13 +700,13 @@ For the remaining server code see the [GitHub repository](https://github.com/Nic
   - ...
 - How to serve a GraphQL server over **HTTP** (view the [Source Code](https://github.com/NickKelly1/graphql-typescript-server/blob/master/src/app.ts) for an example)
 
-## Hosting this example server:
+## Hosting this example server
 
-### With Docker:
+### With Docker
 
 ```bash
 docker run \
-  --name example_gql_ts_accounts \
+  --name graphql_typescript_server \
   -p 5000:5000 \
   -e PORT=5000 \
   -e LOG_DIR=./storage/logs \
@@ -726,8 +724,8 @@ docker run \
 version: "3"
 
 services:
-  example_gql_ts_accounts:
-    container_name: example_gql_ts_accounts
+  graphql_typescript_server:
+    container_name: graphql_typescript_server
     image: nick3141/graphql-typescript-server:latest
     restart: unless-stopped
     ports:
